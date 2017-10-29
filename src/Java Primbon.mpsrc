@@ -1,0 +1,1450 @@
+program Java_Primbon;
+
+uses RSEnum;
+
+var 	cm_Next, cm_bck, chck 			 : Command;
+			SimpanTgl, simpandata 			 : String;
+			STG,SBL,STH									 : String;
+			Konversi,Konversi2,Konversi3 : Integer;
+			MasterA, MasterB						 : String;
+			rs													 : recordStore; 
+			entryIdx										 : integer; 
+			rsEnumIdx										 : integer; 
+			data												 : string;
+
+Procedure MainMenu; forward;
+procedure PRK;			 forward;
+Procedure MenurutHari; forward;
+Procedure MenurutBintang; forward;
+procedure KecocokanHari; forward;
+procedure KecocokanWeton; forward;
+
+function BukaDatabase(namafile: string; apa : string): string; 
+var ketemu : string; 
+    res         : resource; 
+    line        : string; 
+    pos         : integer; 
+begin 
+  res := OpenResource('/'+namafile+'.txt');
+   
+  if (ResourceAvailable(res)) then 
+  begin 
+    repeat 
+      line := ReadLine(res); 
+
+      if line = apa then 
+      begin 
+        Ketemu := ReadLine(res); 
+        break; 
+      end; 
+      else 
+        line := ReadLine(res);
+       
+    until length(line) = 0; 
+  end; 
+
+  Bukadatabase := ketemu;
+end;
+
+
+Procedure PisahTgl(Data : String);
+var 	Tgl,Bln,Thn : String;
+begin   
+  STG := Copy(Data,0,2);
+  SBL := Copy(Data,3,5);
+  STH := Copy(Data,6,Length(Data));
+  
+  Konversi := StringToInteger(STG);
+  STG := IntegerToString(Konversi);
+  
+  Konversi2 := StringToInteger(SBL);
+  SBL := IntegerToString(Konversi2);
+  
+	Konversi3 := StringToInteger(STH);
+  STH := IntegerToString(Konversi3);    
+end;
+
+function CariHari(Data : String) : String;
+var  	hari,bulan,tahun,
+      hasil, m, y1, y2 : integer;
+begin
+   Pisahtgl(Data);
+   Hari := Konversi;
+   Bulan := Konversi2;
+   Tahun := Konversi3;   
+
+   if bulan < 3 then 
+   begin
+     m     := bulan + 10;
+     tahun := tahun - 1
+   end 
+  else
+    m			 := bulan - 2;
+    y1		 := tahun div 100;
+    y2		 := tahun mod 100;
+    hasil  := (hari + trunc(2.6*m - 0.1) + y2 + y2 div 4 + y1 div 4 - 2*y1 + 49) mod 7;
+    if Hasil = 0 then CariHari := 'Minggu';
+    if Hasil = 1 then CariHari := 'Senin';
+    if Hasil = 2 then CariHari := 'Selasa';
+    if Hasil = 3 then CariHari := 'Rabu';
+    if Hasil = 4 then CariHari := 'Kamis';
+    if Hasil = 5 then CariHari := 'Jumat';
+    if Hasil = 6 then CariHari := 'Sabtu';
+end;
+
+function CariWeton(Data : String) : String;
+{ CARI WETON MENURUT TANGGAL LAHIR }
+var	Potong : String;
+		Text,Tmbh,y,x,konversi	 : Integer;
+		j,f,m,a,mi,ju,jl,ag,sp,ok,nv,ds : Integer;
+		SimpanTgl,knvrsiB : Integer;
+begin
+  PisahTgl(Data);
+  
+  Potong := Copy(STH,2,4);
+  x := 1;
+  y := 0;
+  
+  Konversi := StringToInteger(Potong);
+  
+
+  While Konversi <> x+y do
+  begin
+    if y >= 100 then
+    begin
+      x := x + 1;
+      y := 0;
+    end;
+    if Konversi <= 20 then
+      begin
+        y := 0;
+        x := x + 1;
+      end
+    else
+      y := y + 20;
+  end;  
+  
+  
+  if Konversi = x+y then
+    begin
+			if x = 1 then
+			  begin
+			    J := 3;
+			    F := 4;
+			    M := 2;
+			    A := 3;
+			    Mi:= 3;
+			    Ju:= 4;
+			    Jl:= 4;
+			    Ag:= 0;
+			    Sp:= 1;
+			    Ok:= 1;
+			    Nv:= 2;
+			    Ds:= 2;
+			  end
+		else
+			if x = 2 then
+			  begin
+			    J := 3;
+			    F := 4;
+			    M := 2;
+			    A := 3;
+			    Mi:= 3;
+			    Ju:= 4;
+			    Jl:= 4;
+			    Ag:= 0;
+			    Sp:= 1;
+			    Ok:= 1;
+			    Nv:= 2;
+			    Ds:= 2;
+			  end
+		else
+			if x = 3 then
+			  begin
+			    J := 3;
+			    F := 4;
+			    M := 2;
+			    A := 3;
+			    Mi:= 3;
+			    Ju:= 4;
+			    Jl:= 4;
+			    Ag:= 0;
+			    Sp:= 1;
+			    Ok:= 1;
+			    Nv:= 2;
+			    Ds:= 2;
+			  end
+		else
+			if x = 4 then
+			  begin
+			    J := 3;
+			    F := 4;
+			    M := 3;
+			    A := 4;
+			    Mi:= 4;
+			    Ju:= 0;
+			    Jl:= 0;
+			    Ag:= 1;
+			    Sp:= 2;
+			    Ok:= 2;
+			    Nv:= 3;
+			    Ds:= 3;
+			  end
+		else
+			if x = 5 then
+			  begin
+			    J := 4;
+			    F := 0;
+			    M := 3;
+			    A := 4;
+			    Mi:= 4;
+			    Ju:= 0;
+			    Jl:= 0;
+			    Ag:= 1;
+			    Sp:= 2;
+			    Ok:= 2;
+			    Nv:= 3;
+			    Ds:= 3;
+			  end
+    else 
+			if x = 6 then
+			  begin
+			    J := 4;
+			    F := 0;
+			    M := 3;
+			    A := 4;
+			    Mi:= 4;
+			    Ju:= 0;
+			    Jl:= 0;
+			    Ag:= 1;
+			    Sp:= 2;
+			    Ok:= 2;
+			    Nv:= 3;
+			    Ds:= 3;
+			  end
+	  else
+			if x = 7 then
+			  begin
+			    J := 4;
+			    F := 0;
+			    M := 3;
+			    A := 4;
+			    Mi:= 4;
+			    Ju:= 0;
+			    Jl:= 0;
+			    Ag:= 1;
+			    Sp:= 2;
+			    Ok:= 2;
+			    Nv:= 3;
+			    Ds:= 3;
+			  end
+		else
+			if x = 8 then
+			  begin
+			    J := 4;
+			    F := 0;
+			    M := 3;
+			    A := 4;
+			    Mi:= 4;
+			    Ju:= 0;
+			    Jl:= 0;
+			    Ag:= 1;
+			    Sp:= 2;
+			    Ok:= 2;
+			    Nv:= 3;
+			    Ds:= 3;
+			  end
+    else 
+			if x = 9 then
+			  begin
+			    J := 0;
+			    F := 1;
+			    M := 4;
+			    A := 0;
+			    Mi:= 0;
+			    Ju:= 1;
+			    Jl:= 1;
+			    Ag:= 2;
+			    Sp:= 3;
+			    Ok:= 3;
+			    Nv:= 4;
+			    Ds:= 4;
+			  end
+    else 
+			if x = 10 then
+			  begin
+			    J := 0;
+			    F := 1;
+			    M := 4;
+			    A := 0;
+			    Mi:= 0;
+			    Ju:= 1;
+			    Jl:= 1;
+			    Ag:= 2;
+			    Sp:= 3;
+			    Ok:= 3;
+			    Nv:= 4;
+			    Ds:= 4;
+			  end
+	  else
+			if x = 11 then
+			  begin
+			    J := 0;
+			    F := 1;
+			    M := 4;
+			    A := 0;
+			    Mi:= 0;
+			    Ju:= 1;
+			    Jl:= 1;
+			    Ag:= 2;
+			    Sp:= 3;
+			    Ok:= 3;
+			    Nv:= 4;
+			    Ds:= 4;
+			  end
+    else  
+			if x = 12 then
+			  begin
+			    J := 0;
+			    F := 1;
+			    M := 0;
+			    A := 1;
+			    Mi:= 1;
+			    Ju:= 2;
+			    Jl:= 2;
+			    Ag:= 3;
+			    Sp:= 4;
+			    Ok:= 4;
+			    Nv:= 0;
+			    Ds:= 0
+			  end
+     else 
+			if x = 13 then
+			  begin
+			    J := 1;
+			    F := 2;
+			    M := 0;
+			    A := 1;
+			    Mi:= 1;
+			    Ju:= 2;
+			    Jl:= 2;
+			    Ag:= 3;
+			    Sp:= 4;
+			    Ok:= 4;
+			    Nv:= 0;
+			    Ds:= 0
+			  end
+		 else
+			if x = 14 then
+			  begin
+			    J := 1;
+			    F := 2;
+			    M := 0;
+			    A := 1;
+			    Mi:= 1;
+			    Ju:= 2;
+			    Jl:= 2;
+			    Ag:= 3;
+			    Sp:= 4;
+			    Ok:= 4;
+			    Nv:= 0;
+			    Ds:= 0
+			  end
+		 else
+			if x = 15 then
+			  begin
+			    J := 1;
+			    F := 2;
+			    M := 0;
+			    A := 1;
+			    Mi:= 1;
+			    Ju:= 2;
+			    Jl:= 2;
+			    Ag:= 3;
+			    Sp:= 4;
+			    Ok:= 4;
+			    Nv:= 0;
+			    Ds:= 0;
+			  end
+		 else
+			if x = 16 then
+			  begin
+			    J := 1;
+			    F := 2;
+			    M := 1;
+			    A := 2;
+			    Mi:= 2;
+			    Ju:= 3;
+			    Jl:= 3;
+			    Ag:= 4;
+			    Sp:= 0;
+			    Ok:= 0;
+			    Nv:= 1;
+			    Ds:= 1;
+			  end
+		 else	
+			if x = 17 then
+			  begin
+			    J := 2;
+			    F := 3;
+			    M := 1;
+			    A := 2;
+			    Mi:= 2;
+			    Ju:= 3;
+			    Jl:= 3;
+			    Ag:= 4;
+			    Sp:= 0;
+			    Ok:= 0;
+			    Nv:= 1;
+			    Ds:= 1;
+			  end
+		 else
+			if x = 18 then
+			  begin
+			    J := 2;
+			    F := 3;
+			    M := 1;
+			    A := 2;
+			    Mi:= 2;
+			    Ju:= 3;
+			    Jl:= 3;
+			    Ag:= 4;
+			    Sp:= 0;
+			    Ok:= 0;
+			    Nv:= 1;
+			    Ds:= 1;
+			  end
+		 else
+			if x = 19 then
+			  begin
+			    J := 2;
+			    F := 3;
+			    M := 1;
+			    A := 2;
+			    Mi:= 2;
+			    Ju:= 3;
+			    Jl:= 3;
+			    Ag:= 4;
+			    Sp:= 0;
+			    Ok:= 0;
+			    Nv:= 1;
+			    Ds:= 1;
+			  end
+     else  
+			if x = 20 then
+			  begin
+			    J := 2;
+			    F := 3;
+			    M := 2;
+			    A := 3;
+			    Mi:= 3;
+			    Ju:= 4;
+			    Jl:= 4;
+			    Ag:= 0;
+			    Sp:= 1;
+			    Ok:= 1;
+			    Nv:= 2;
+			    Ds:= 2;
+			  end;  
+			  
+			if StringtoInteger(SBL) = 1 then
+			  knvrsiB := J;
+		else	
+			if StringtoInteger(SBL) = 2 then
+			  knvrsiB := f;
+		else	
+			if StringtoInteger(SBL) = 3 then
+			  knvrsiB := M;
+		else	
+			if StringtoInteger(SBL) = 4 then
+			  knvrsiB := A;
+		else	
+			if StringtoInteger(SBL) = 5 then
+			  knvrsiB := Mi;
+		else	
+			if StringtoInteger(SBL) = 6 then
+			  knvrsiB := Ju;
+		else	
+			if StringtoInteger(SBL) = 7 then
+			  knvrsiB := Jl;
+		else	
+			if StringtoInteger(SBL) = 8 then
+			  knvrsiB := Ag;
+		else	
+			if StringtoInteger(SBL) = 9 then
+			  knvrsiB := sp;
+		else	
+			if StringtoInteger(SBL) = 10 then
+			  knvrsiB := ok;
+		else	
+			if StringtoInteger(SBL) = 11 then
+			  knvrsiB := nv;
+		else	
+			if StringtoInteger(SBL) = 12 then
+			  knvrsiB := ds;
+			  
+			SimpanTgl := StringToInteger(STG) + KnvrsiB;
+			
+			Y := 0;
+			x := 0;
+			
+			While SimpanTgl <> x+y do
+			begin
+				if y >= 35 then
+				begin
+				  x := x + 1;
+				  y := 0;
+				end;
+				if SimpanTgl > 5 then
+			    y := y + 5
+			  else
+			    x := x + 1;
+			end;  
+			
+			if x = 0 then
+			  CariWeton := 'Pon';
+		else
+	    if x = 1 then
+			  CariWeton := 'Wage';
+		else
+			if x = 2 then
+			  CariWeton := 'Kliwon';
+		else
+			if x = 3 then
+			  CariWeton := 'Legi';
+		else
+			if x = 4 then
+			  CariWeton := 'Pahing';
+
+    end;
+end;
+
+function caribintang(data : string) : string;
+var T,B : Integer;
+begin
+  PisahTgl(Data);
+  
+  T := StringToInteger(STG);
+  B := StringToInteger(SBL);
+  
+  if ((T >= 19) and (B = 1)) or ((T <= 18) and (B = 2)) then 
+     Caribintang := 'Aquarius';
+ else
+  if ((T >= 19) and (B = 2)) or ((T <= 20) and (B = 3)) then 
+     Caribintang := 'Pisces';
+ else
+  if ((T >= 20) and (B = 3)) or ((T <= 19) and (B = 4)) then 
+     Caribintang := 'Aries';
+ else
+  if ((T >= 20) and (B = 4)) or ((T <= 20) and (B = 5)) then 
+     Caribintang := 'Taurus';
+ else
+  if ((T >= 21) and (B = 5)) or ((T <= 21) and (B = 6)) then 
+     Caribintang := 'Gemini';
+ else
+  if ((T >= 22) and (B = 6)) or ((T <= 22) and (B = 7)) then 
+     Caribintang := 'Cancer';
+ else
+  if ((T >= 23) and (B = 7)) or ((T <= 22) and (B = 8)) then 
+     Caribintang := 'Leo';
+ else
+  if ((T >= 23) and (B = 8)) or ((T <= 22) and (B = 9)) then 
+     Caribintang := 'Virgo';
+ else
+  if ((T >= 23) and (B = 9)) or ((T <= 23) and (B = 10)) then 
+     Caribintang := 'Libra';
+ else
+  if ((T >= 24) and (B = 10)) or ((T <= 21) and (B = 11)) then 
+     Caribintang := 'Scorpio';
+ else
+  if ((T >= 23) and (B = 11)) or ((T <= 21) and (B = 12)) then 
+     Caribintang := 'Sagitarius';
+ else
+  if ((T >= 22) and (B = 12)) or ((T <= 18) and (B = 1)) then 
+     Caribintang := 'Carpicornus';
+end;
+
+
+Procedure MenurutTanggal;
+var	Text : Integer;
+		mnu2 : Command;	
+begin
+  ClearForm;
+  ShowForm;
+  SetFormTitle('Menurut Tanggal');
+  PisahTgl(SimpanData);
+  AddCommand(cm_Bck);
+  AddCommand(cm_Next);
+  Text	:= FormAddString(Bukadatabase('Kelahiran',STG));
+  repeat
+    mnu2 := GetClickedCommand;
+    if mnu2 = cm_Next then
+      MenurutHari;
+  until mnu2 = cm_Bck;
+  PRK;
+end;      
+
+Procedure MenurutHari;
+var	Text : Integer;
+		mnu2 : Command;	
+begin
+  ClearForm;
+  ShowForm;
+  SetFormTitle('Menurut Hari');
+  AddCommand(cm_Bck);
+  AddCommand(cm_Next);
+  Text	:= FormAddString('Anak ini lahir pada hari '+CariHari(SimpanData)+' '+CariWeton(SimpanData)+' yang artinya '+BukaDatabase('Harikelahiran',CariHari(SimpanData)));
+  repeat
+    mnu2 := GetClickedCommand;
+    if mnu2 = cm_next then
+    begin 
+      MenurutBintang;
+    end;
+  until mnu2 = cm_Bck;
+  MenurutTanggal;
+end;   
+
+Procedure BlankForm(nfile : string; apa : string);
+var text : integer;
+    mnu4 : command;
+begin
+  ClearForm;
+  ShowForm;
+  
+  SetFormTitle(nfile);
+  
+  text := FormAddString(BukaDatabase(nfile,apa));
+  
+  addCommand(cm_bck);
+  repeat
+    mnu4 := getclickedcommand;
+  until mnu4 = cm_bck;
+  MenurutBintang;
+end;
+  
+  
+
+Procedure MenurutBintang;
+var arti,ciri,pekerjaan,kesehatan,jodoh,pengaruh  	: integer;
+		mnu3																				  	: Command;
+begin 
+  ClearForm;
+  ShowForm;
+  ShowMenu('Menurut Bintang '+Caribintang(Simpandata), CH_IMPLICIT);
+  
+  arti := MenuAppendStringImage('Arti '+Caribintang(Simpandata), LoadImage('/arti.png')); 
+  ciri := MenuAppendStringImage('Ciri - Ciri '+Caribintang(Simpandata), LoadImage('/ciri.png')); 
+  pekerjaan := MenuAppendStringImage('Pekerjaan '+Caribintang(Simpandata), LoadImage('/job.png')); 
+  kesehatan := MenuAppendStringImage('Kesehatan '+Caribintang(Simpandata), LoadImage('/PMR.png')); 
+  jodoh := MenuAppendStringImage('Jodoh '+Caribintang(Simpandata), LoadImage('/jodoh.png'));
+  pengaruh := MenuAppendStringImage('Lain - lain', LoadImage('/pengaruh.png'));
+  
+  AddCommand(cm_Next);
+  AddCommand(cm_bck);
+  repeat
+    mnu3 := GetClickedCommand;    
+    if mnu3 = cm_bck then
+      MenurutHari;
+  until mnu3 <> EmptyCommand;
+  
+  if MenuGetSelectedIndex = arti then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Arti');
+  end;
+  if MenuGetSelectedIndex = ciri then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Ciri');
+  end;
+  if MenuGetSelectedIndex = Pekerjaan then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Pekerjaan');
+  end;
+  if MenuGetSelectedIndex = kesehatan then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Kesehatan');
+  end;
+  if MenuGetSelectedIndex = Jodoh then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Jodoh');
+  end;
+  if MenuGetSelectedIndex = pengaruh then 
+  begin
+    BlankForm(Caribintang(Simpandata),'Pengaruh');
+  end;
+
+end;
+
+
+procedure PRK;
+var 	Tanggal, CTH, Text : Integer;
+			mnu2,mnu3		: Command;
+begin
+  ClearForm;
+  SetFormTitle('Primbon Kelahiran');
+  SetTicker('Ketahui sifat anda dengan memasukan tanggal lahir anda.');
+    
+  Tanggal := FormAddTextField('Masukan tanggal lahir anda', SimpanData, 10, TF_PHONENUMBER); 
+  CTH			:= FormAddString('Contoh : 09*06*1993, harus dipisahkan dengan *, +, atau #');
+  
+  ShowForm;
+  
+  addcommand(cm_Next);
+  addcommand(cm_Bck);
+  repeat
+    chck := GetClickedCommand;
+    
+    if chck = cm_Next then
+      begin
+        SimpanData := FormGetText(Tanggal);
+        SimpanTgl  := SimpanData;
+        PisahTgl(SimpanData);
+        if (StringToInteger(STG) <= 31) and (StringToInteger(SBL) <= 12) and (StringToInteger(STH) >= 0000) then
+          MenurutTanggal;
+      end;
+        
+  until chck = cm_Bck;
+  
+  MainMenu;					{ Kembali ke Menu Utama }
+end;
+
+{---------------------------------------------------------------------------
+ - Love Meter Program Section																							 -
+ - Copyright 2008, F_Computer PrOjEcT.																		 -
+ ---------------------------------------------------------------------------}
+ 
+function hitung(nmA,nmB : string) : string;
+var 	rbA,rbB : String;
+			pjA,pjB : Integer;
+			ht1,ht2 : Integer;
+			htngO,htngO2,simpenO : Integer;
+			simpen			 : Integer;
+begin
+  rbA := Upcase(nmA);
+  rbB := Upcase(nmB);
+  pjA := Length(rbA);
+  pjB := Length(rbB);
+  
+  ht1 := 0;
+  
+  begin
+    if POS(rbA,'L') <> -1 then ht1 := ht1 + 2;
+    if POS(rbA,'O') <> -1 then ht1 := ht1 + 2;        
+    if POS(rbA,'V') <> -1 then ht1 := ht1 + 2;
+    if POS(rbA,'E') <> -1 then ht1 := ht1 + 2;
+    
+    if POS(rbA,'Y') <> -1 then ht1 := ht1 + 3;
+    if POS(rbA,'O') <> -1 then ht1 := ht1 + 1;
+    if POS(rbA,'U') <> -1 then ht1 := ht1 + 3;    
+  end;
+  
+  begin
+    if POS(rbB,'L') <> -1 then ht1 := ht1 + 2;
+    if POS(rbB,'O') <> -1 then ht1 := ht1 + 2;        
+    if POS(rbB,'V') <> -1 then ht1 := ht1 + 2;
+    if POS(rbB,'E') <> -1 then ht1 := ht1 + 2;
+    
+    if POS(rbB,'Y') <> -1 then ht1 := ht1 + 3;
+    if POS(rbB,'O') <> -1 then ht1 := ht1 + 1;
+    if POS(rbB,'U') <> -1 then ht1 := ht1 + 3;    
+  end;
+   
+  simpen := 0;
+  
+  if (ht1 >  0) then simpen :=   5-((pjA + pjB)/2)
+	if (ht1 >  2) then simpen :=  10-((pjA + pjB)/2)
+	if (ht1 >  4) then simpen :=  20-((pjA + pjB)/2)
+	if (ht1 >  6) then simpen :=  30-((pjA + pjB)/2)
+	if (ht1 >  8) then simpen :=  40-((pjA + pjB)/2)
+	if (ht1 > 10) then simpen :=  50-((pjA + pjB)/2)
+	if (ht1 > 12) then simpen :=  60-((pjA + pjB)/2)
+	if (ht1 > 14) then simpen :=  70-((pjA + pjB)/2)
+	if (ht1 > 16) then simpen :=  80-((pjA + pjB)/2)
+	if (ht1 > 18) then simpen :=  90-((pjA + pjB)/2)
+	if (ht1 > 20) then simpen := 100-((pjA + pjB)/2)
+	if (ht1 > 22) then simpen := 110-((pjA + pjB)/2)
+  
+  hitung := integerToString(simpen)+'%';  
+end;
+  
+  
+ 
+procedure LOVEMeter;
+var 	nama, nmpas : integer;
+			simpenA,simpenB : String;
+			pil,pil2				: Command;
+			hasil,gambar  	: Integer;
+			smiley					: integer;
+begin
+  ClearForm;
+  
+  SetFormTitle('LOVE METER');
+  SetTicker('Love Meter, copyright 2007 - 2008 F_Computer PrOjEcT. All Rights Reserved');
+  
+  nama := FormAddTextField('Masukan nama lengkap kamu',simpenA,80,TF_ANY);
+  nmpas:= FormAddTextField('Masukan nama lengkap pasangan',simpenB,80,TF_ANY);
+  
+  AddCommand(cm_Next);
+  AddCommand(cm_bck);
+  
+  ShowForm;
+  
+  repeat
+    pil := GetClickedCommand;
+    if pil = cm_Next then
+    begin
+      simpenA := FormGetText(nama);
+      simpenB := FormGetText(nmpas);      
+      
+      if (SimpenA = ' ') or (SimpenA = '') then
+      begin
+        showAlert('Error','Mohon masukan nama anda dikotak nama',loadImage('/error.png'),ALERT_ERROR);  
+        PlayAlertSound;
+        AddCommand(cm_bck);
+        repeat delay (100); until getclickedcommand <> EmptyCommand;
+        LOVEMETER;
+      end;
+     else
+     if (SimpenB = ' ') or (SimpenB = '') then
+      begin
+        showAlert('Error','Mohon masukan nama pasangan anda dikotak nama',loadImage('/error.png'),ALERT_ERROR);  
+        PlayAlertSound;
+        AddCommand(cm_bck);
+        repeat delay (100); until getclickedcommand <> EmptyCommand;
+        LOVEMETER;
+      end;
+      
+      ClearForm;
+      
+      gambar:= FormAddImage(LoadImage('/HASIL.png'));
+      hasil := FormAddString('Hasil dari '+SimpenA+' & '+SimpenB+' adalah : '+hitung(simpenA,SimpenB));
+      if StringToInteger(hitung(simpenA,SimpenB)) >= 75 then
+        smiley := FormAddImage(LoadImage('/bagus.png'))
+      else
+      if (StringToInteger(hitung(simpenA,SimpenB)) >= 26) and (StringToInteger(hitung(simpenA,SimpenB)) <= 74) then
+        smiley := FormAddImage(LoadImage('/sedang.png'))
+      else
+      if StringToInteger(hitung(simpenA,SimpenB)) <= 25 then
+        smiley := FormAddImage(LoadImage('/buruk.png'));      
+      
+      addcommand(cm_bck);
+      
+      repeat
+        pil2 := GetClickedCommand;
+      until pil2 = cm_bck;
+      LOVEMETER;
+    end;       
+      
+  until pil = cm_bck;
+  MainMenu;
+end;
+
+{------------------------------------------------------------------------------
+ - Kecocokan Pasagan Program Section																					-
+ - Copyright 2008, F_Computer PrOjEcT																				  -
+ ------------------------------------------------------------------------------}
+ 
+Procedure PilihOpsi;
+var Hari, Neptu : Integer;
+begin
+  ClearForm;
+  ShowMenu('Jenis Ramalan',CH_IMPLICIT);
+  SetFormTitle('Jenis Ramalan');
+  
+  Hari := MenuAppendStringImage('Berdasarkan hari', LoadImage('/hari.png'));
+  Neptu := MenuAppendStringImage('Berdasarkan neptu', LoadImage('/hari.png'));
+  
+  AddCommand(cm_next);
+  AddCommand(cm_bck);
+  
+  {repeat
+    chck := GetClickedCommand;
+    if (chck = cm_next) or (chck <> EmptyCommand) then
+    begin
+       if MenuGetSelectedIndex = Hari then KecocokanHari;
+       if MenuGetSelectedIndex = Neptu then KecocokanWeton;
+    end;
+    if (chck = cm_bck) or (chck <> EmptyCommand) then
+      MainMenu;
+  until chck = cm_bck;
+  MainMenu;}
+  repeat
+    chck := GetClickedCommand;
+    if chck = cm_bck then
+      MainMenu;
+  until chck <> EmptyCommand;
+  if MenuGetSelectedIndex = Hari then KecocokanHari;
+  if MenuGetSelectedIndex = Neptu then KecocokanWeton;
+end;
+ 
+Procedure template(isi, ticker, title : string);
+var 	text : integer;
+			mnu	 : Command;
+begin
+  ClearForm;
+  ShowForm;
+  
+  SetTicker(ticker);
+  SetFormTitle(Title);
+  
+  text := FormAddString(isi);
+  
+  AddCommand(cm_bck);
+  
+  repeat
+    mnu := GetClickedCommand;
+  until mnu = cm_bck;
+  kecocokanHari;
+end;
+ 
+procedure KecocokanHari;
+var 	HeaderA,HeaderB : Integer;
+			MA,SA,SLA,RA,KA,JA,SBA : Integer;
+			MB,SB,SLB,RB,KB,JB,SBB : Integer;
+			Menu									 : Command;			
+			simpan								 : String;
+begin
+  ClearForm;
+  
+  HeaderA := FormAddChoice('Pria', CH_EXCLUSIVE);
+  MA			:= ChoiceAppendString(HeaderA, 'Minggu'); 
+  SA			:= ChoiceAppendString(HeaderA, 'Senin'); 
+	SLA	  	:= ChoiceAppendString(HeaderA, 'Selasa');   
+  RA			:= ChoiceAppendString(HeaderA, 'Rabu'); 
+	KA			:= ChoiceAppendString(HeaderA, 'Kamis'); 
+	JA			:= ChoiceAppendString(HeaderA, 'Jumat'); 
+	SBA 		:= ChoiceAppendString(HeaderA, 'Sabtu'); 
+	
+	HeaderB := FormAddChoice('Wanita', CH_EXCLUSIVE);
+  MB			:= ChoiceAppendString(HeaderB, 'Minggu'); 
+  SB			:= ChoiceAppendString(HeaderB, 'Senin'); 
+	SLB	  	:= ChoiceAppendString(HeaderB, 'Selasa');   
+  RB			:= ChoiceAppendString(HeaderB, 'Rabu'); 
+	KB			:= ChoiceAppendString(HeaderB, 'Kamis'); 
+	JB			:= ChoiceAppendString(HeaderB, 'Jumat'); 
+	SBB 		:= ChoiceAppendString(HeaderB, 'Sabtu'); 
+	
+	ShowForm;
+	SetFormTitle('Perhitungan Hari');
+	SetTicker('Kecocokan pasangan berdasarkan hari lahir pasangan.');
+	
+	Simpan := '';
+	
+	AddCommand(cm_next);
+	AddCommand(cm_bck);
+	
+	repeat
+	  Menu := GetClickedCommand;
+	  
+	  if Menu = cm_next then 
+		begin	  
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,MB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,MA)) then
+	      Simpan := 'Dalam keluarga tersebut diramalkan akan sering sakit.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,SB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,SA)) then
+	      Simpan := 'Dalam keluarga tersebut diramalkan akan banyak yang sakit.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,SLB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,SLA))then
+	      Simpan := 'Sebenarnya kurang cocok antara kedua pasangan ini, karena keluarga ini akan miskin.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,RB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,RA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,KB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,KA)) then
+	      Simpan := 'Sering terjadi cekcok antara kedua pasangan ini.'
+	  else
+			if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,JB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,JA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,MA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,MB) and ChoiceIsSelected(HeaderA,SBA)) then
+	      Simpan := 'Sebenarnya kurang cocok antara kedua pasangan ini, karena keluarga ini akan miskin.'
+	  else	  
+	  
+	    if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,SB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,SA)) then
+	      Simpan := 'Pasangan ini tidak cocok di perjodohanya.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,SLB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,SLA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,RB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,RA)) then
+	      Simpan := 'Diramalkan anaknya akan perempuan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,KB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,KA)) then
+	      Simpan := 'Didalam keluarga ini akan banyak kasih sayang antar anggota keluarga.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,JB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,JA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+			if (ChoiceIsSelected(HeaderA,SA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,SB) and ChoiceIsSelected(HeaderA,SBA)) then
+	      Simpan := 'Biasanya kedua pasangan ini akan direstui.'
+	  else
+	  
+	    if (ChoiceIsSelected(HeaderA,SLA) and ChoiceIsSelected(HeaderB,SLB)) or (ChoiceIsSelected(HeaderB,SLB) and ChoiceIsSelected(HeaderA,SLA)) then
+	      Simpan := 'Pasangan ini tidak cocok di perjodohanya.'
+	  else
+			if (ChoiceIsSelected(HeaderA,SLA) and ChoiceIsSelected(HeaderB,RB)) or (ChoiceIsSelected(HeaderB,SLB) and ChoiceIsSelected(HeaderA,RA)) then
+	      Simpan := 'Diramalkan akan kaya dalam harta.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SLA) and ChoiceIsSelected(HeaderB,KB)) or (ChoiceIsSelected(HeaderB,SLB) and ChoiceIsSelected(HeaderA,KA)) then
+	      Simpan := 'Diramalkan akan kaya dalam harta.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,SLA) and ChoiceIsSelected(HeaderB,JB)) or (ChoiceIsSelected(HeaderB,SLB) and ChoiceIsSelected(HeaderA,JA)) then
+	      Simpan := 'Diramalkan pasangan ini akhirnya akan bercerai.'
+	  else
+			if (ChoiceIsSelected(HeaderA,SLA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,SLB) and ChoiceIsSelected(HeaderA,SBA)) then
+	      Simpan := 'Dalam keluarga tersebut diramalkan akan sering sakit.'
+	  else
+	  
+	  	if (ChoiceIsSelected(HeaderA,RA) and ChoiceIsSelected(HeaderB,RB)) or (ChoiceIsSelected(HeaderB,RB) and ChoiceIsSelected(HeaderA,RA)) then
+	      Simpan := 'Pasangan ini tidak cocok di perjodohanya.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,RA) and ChoiceIsSelected(HeaderB,KB)) or (ChoiceIsSelected(HeaderB,RB) and ChoiceIsSelected(HeaderA,KA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,RA) and ChoiceIsSelected(HeaderB,JB)) or (ChoiceIsSelected(HeaderB,RB) and ChoiceIsSelected(HeaderA,JA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+			if (ChoiceIsSelected(HeaderA,RA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,RB) and ChoiceIsSelected(HeaderA,SBA)) then
+	      Simpan := 'Pasangan ini cocok di perjodohanya.'
+		else
+
+	    if (ChoiceIsSelected(HeaderA,KA) and ChoiceIsSelected(HeaderB,KB)) or (ChoiceIsSelected(HeaderB,KB) and ChoiceIsSelected(HeaderA,KA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+	    if (ChoiceIsSelected(HeaderA,KA) and ChoiceIsSelected(HeaderB,JB)) or (ChoiceIsSelected(HeaderB,KB) and ChoiceIsSelected(HeaderA,JA)) then
+	      Simpan := 'Keluarga ini akan selalu mendapatkan keselamatan.'
+	  else
+			if (ChoiceIsSelected(HeaderA,KA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,KB) and ChoiceIsSelected(HeaderA,SBA)) then
+	      Simpan := 'Pasangan yang ini, akan mendapatkan celaka jika menikah.'
+		else
+		
+			if (ChoiceIsSelected(HeaderA,SBA) and ChoiceIsSelected(HeaderB,SBB)) or (ChoiceIsSelected(HeaderB,SBB) and ChoiceIsSelected(HeaderA,SBA))then
+	      Simpan := 'Pasangan ini tidak cocok di perjodohanya.';
+	      
+	    Template(Simpan,'Diramalkan pasangan ini akan ' + simpan, 'Hasil');
+	  end;
+	  
+	until menu = cm_bck;
+	PilihOpsi;
+end;
+
+function KonversiHari(Hari : String) : Integer;
+begin
+  if Hari = 'Minggu' then
+    KonversiHari := 5
+ else
+  if Hari = 'Senin' then
+    KonversiHari := 4
+ else
+  if Hari = 'Selasa' then
+    KonversiHari := 3
+ else
+  if Hari = 'Rabu' then
+    KonversiHari := 7
+ else
+  if Hari = 'Kamis' then
+    KonversiHari := 8
+ else
+  if Hari = 'Jumat' then
+    KonversiHari := 6
+ else
+  if Hari = 'Sabtu' then
+    KonversiHari := 9;
+end;
+
+function KonversiNeptu(Neptu : String) : Integer;
+begin
+  if Neptu = 'Pon' then
+    KonversiNeptu := 7
+ else
+  if Neptu = 'Wage' then
+    KonversiNeptu := 4
+ else
+  if Neptu = 'Kliwon' then
+    KonversiNeptu := 5
+ else
+  if Neptu = 'Legi' then
+    KonversiNeptu := 8
+ else
+  if Neptu = 'Pahing' then
+    KonversiNeptu := 9
+end;
+
+function hasil(input : integer) : string;
+begin
+  if input = 1 then
+    hasil := 'Hasil akhir dari perhitungan pasangan anda adalah 1, yang mempunyai nama Sri yang berarti rejekinya melimpah'
+ else
+  if input = 2 then
+    hasil := 'Hasil akhir dari perhitungan pasangan anda adalah 2, yang mempunyai nama Dana yang berarti suka memberi dan berejeki banyak'
+ else
+  if input = 3 then
+    hasil := 'Hasil akhir dari perhitungan pasangan anda adalah 3, yang mempunyai nama Lara yang berarti akan banyak derita dan keluh kesah'
+ else
+  if input = 4 then
+    hasil := 'Hasil akhir dari perhitungan pasangan anda adalah 4, yang mempunyai nama Pati yang berarti segala usaha anda akan berhenti di tengah jalan'
+ else
+  if input = 5 then
+    hasil := 'Hasil akhir dari perhitungan pasangan anda adalah 5, yang mempunyai nama Lungguh yang berarti keluarganya akan tentram dan damai';
+end;
+
+Procedure KecocokanWeton;
+var 	Aku, Kowe : Integer;
+			Menu,mnu2	: Command;
+			SA,SB			: String;
+			AI,AII,BI,BII,JmlhA,JmlhB, Text : Integer;
+begin
+  clearform;
+  Showform;
+  SetFormTitle('Weton pasangan');
+  
+  SetTicker('Menghitung kecocokan pasangan menggunakan perhitungan hari dan weton pasangan');
+  
+  Aku := FormAddTextField('Masukan tanggal lahir anda', MasterA, 10, TF_PHONENUMBER); 
+	Kowe := FormAddTextField('Masukan tanggal lahir pasangan', MasterB, 10, TF_PHONENUMBER);
+	
+	AddCommand(cm_next);
+	AddCommand(cm_bck);
+	
+	Repeat
+	  Menu := GetClickedCommand;
+	  if Menu = cm_next then
+	  begin
+	    SA := FormGetText(Aku);
+	    SB := FormGetText(Kowe);
+	    
+	    PisahTgl(SA);
+	    if not (StringToInteger(STG) <= 31) and (StringToInteger(SBL) <= 12) and (StringToInteger(STH) >= 0000) then
+	       KecocokanWeton;
+
+      PisahTgl(SB);   
+	    if not (StringToInteger(STG) <= 31) and (StringToInteger(SBL) <= 12) and (StringToInteger(STH) >= 0000) then
+	       KecocokanWeton;
+
+			MasterA := SA;
+	    MasterB := SB;
+	    
+	    
+	    AI  := KonversiHari(CariHari(MasterA));
+	    AII := KonversiNeptu(CariWeton(MasterA));
+	    
+	    BI  := KonversiHari(CariHari(MasterB));
+	    BII := KonversiNeptu(CariWeton(MasterB));
+	    
+	    JmlhA := (AI + AII) + (BI + BII);
+	    
+	    JmlhB := JmlhA mod 5;
+	    
+	    ClearForm;
+	    ShowForm;
+	    SetFormTitle('Hasilnya');
+	    
+	    Text := FormAddString(Hasil(JmlhB));
+	    
+	    AddCommand(cm_bck);
+	    
+	    repeat
+	      mnu2 := GetclickedCommand;
+	    until mnu2 = cm_bck;
+	    
+	    KecocokanWeton;
+	  end;
+	until menu = cm_bck;
+	PilihOpsi;
+end;
+	    
+Procedure GolDar;
+var 	PilhDarah 		: Integer;
+			A,B,O,AB  		: Integer;
+			Menu,Sub1		  : Command;
+			Simpan,Data 	: String;
+			Text					: Integer;
+begin
+  ClearForm;
+  ShowForm;
+  SetFormTitle('Golongan Darah');
+  
+  SetTicker('Cari tahu apa arti golongan darah anda');
+  
+  PilhDarah := FormAddChoice('Gologan Darah', CH_EXCLUSIVE);
+  A := ChoiceAppendString(PilhDarah, 'A');
+  B := ChoiceAppendString(PilhDarah, 'B');
+  O := ChoiceAppendString(PilhDarah, 'O');
+  AB:= ChoiceAppendString(PilhDarah, 'AB');
+  
+  AddCommand(cm_Next);
+  AddCommand(cm_bck);
+  
+  repeat
+    menu := getclickedcommand;
+    if menu = cm_Next then
+    begin
+      if ChoiceIsSelected(PilhDarah, A) then
+      begin
+        Simpan := 'GolA';
+        Data   := 'DATAA';
+      end
+     else
+      if ChoiceIsSelected(PilhDarah, B) then
+      begin
+        Simpan := 'GolB';
+        Data	 := 'DATAB';
+      end
+     else
+      if ChoiceIsSelected(PilhDarah, O) then
+      begin
+        Simpan := 'GolO';
+        Data	 := 'DATAO';
+      end
+     else
+      if ChoiceIsSelected(PilhDarah, AB) then
+      begin
+        Simpan := 'GolAB';
+        Data   := 'DATAAB';
+      end; 
+        
+     ClearForm;
+     ShowForm;
+     SetFormTitle('Hasil');
+     
+     AddCommand(cm_bck);
+     
+     Text := FormAddString(BukaDatabase(Simpan,data));
+     
+     repeat
+       Sub1 := getclickedcommand;
+     until Sub1 <> EmptyCommand;
+     Goldar;
+   end;
+       
+  until menu = cm_bck;
+  
+  MainMenu;
+end;
+     
+Procedure About;
+var 	Text : integer;
+			Menu : Command;
+begin
+  ClearForm;
+  ShowForm;
+  SetFormTitle('About...');
+  
+  Text := FormAddString('JAVA PRIMBON, created and designed by F_Computer. Felix Angga Erlandhita. All Rights Reserved. Copyright 2008. This program is freeware, if you want to distribute this program, please don'+'t give anything charge for it. F_Computer is not responsible for any broken relationships resulting from this program. Enjoy it !!');
+  
+  AddCommand(cm_bck);
+  
+  repeat
+    menu := GetClickedCommand;
+  until menu = cm_bck;
+  MainMenu;
+end;
+
+Procedure Thnks;
+var 	Text : integer;
+			Gambar : Integer;
+			Menu : Command;
+begin
+  ClearForm;
+  ShowForm;
+  SetFormTitle('Thanks To');
+  
+  
+  Gambar := FormAddImage(LoadImage('/THANKS.png'));
+  Text := FormAddString('Jesus Christ, M.AliAkov (Ide program + Informasi), Ofan & Niko (Support), XTNA (Special Support), my family and my dog,  www.primbon.com, Horoscoop International, Ramalan Horoskop Java v2.0, etc');
+  
+  AddCommand(cm_bck);
+  
+  repeat
+    menu := GetClickedCommand;
+  until menu = cm_bck;
+  MainMenu;
+end;
+
+{--------------------------------------------------------------------------------------
+ - COMMENT Program Section																														-
+ - Copyright 2006 - 2008. All Rights Reserved.																				-
+ --------------------------------------------------------------------------------------}
+ 
+Procedure Comment;
+var 	Text, TxtBx, Gambar, nama, where : Integer;
+			menu,menu2  : Command;
+			cont,back   : Command;
+begin
+  ClearForm;
+  
+  SetTicker('Kritik dan saran anda sangat kami butuhkan demi kemajuan program ini');
+  SetFormTitle ('Comment !!');
+  Text := FormAddString('Silahkan ketik kritik maupun saran mengenai program ini. Ingat !! pengiriman data akan memakai pulsa sms tarif normal. Jika setuju, tekan lanjut, jika tidak tekan kembali.');  
+  ShowForm;
+  
+  AddCommand(cm_Next);
+  AddCommand(cm_bck);
+  
+  repeat
+    menu := GetClickedCommand;
+    if menu = cm_next then
+    begin
+      clearform;
+      
+      SetFormTitle('Kritik dan Saran');
+      
+      Nama  := FormAddTextField('Nama anda','',40,TF_ANY);
+			where := FormAddTextField('Lokasi','',40,TF_ANY);
+      TxtBX := FormAddTextField('Ketik Kritik Dan Saran','',200,TF_ANY);
+            
+      ShowForm;
+      
+			cont := CreateCommand('Kirim', CM_OK, 1); 
+			AddCommand(cont); 
+			
+			back := CreateCommand('Kembali', CM_BACK, 1); 
+			AddCommand(back); 
+			
+			repeat
+			  menu2 := GetClickedCommand;
+			  if menu2 = cont then
+			  begin
+			    if not SmsStartSend('sms://+6285643318733', 'JAVA PRIMBON v.1.3.0 : ('+FormGetText(Nama)+') di ('+FormGetText(where)+') '+FormGetText(TxtBx)) then MainMenu;
+			    
+			    While SmsIsSending do 
+			      {ShowAlert('','Sending data ...',LoadImage('/info.png'),ALERT_INFO);}
+			      begin
+			        Clearform;
+			        
+			        SetFormTitle('Please Wait');
+			        Text := FormAddString('Sending data ...');
+			        
+			        Showform;
+			      end;
+			    
+					if SmsWasSuccessfull then
+					begin
+					  Clearform;
+					  
+					  Gambar := FormAddImage(LoadImage('/Sukses.png'));
+					  Text   := FormAddString('DATA berhasil dikirim, terima kasih atas Kritik dan Saran yang anda berikan. Tekan Kembali untuk kembali ke Menu Utama.');
+					 
+					  ShowForm;
+					  
+					  AddCommand(back);
+					  
+					  repeat
+					    menu := GetClickedCommand;
+					  until menu = back;
+					  
+					  MainMenu;
+					end
+				else
+				  begin
+					  Clearform;
+					  
+					  Gambar := FormAddImage(LoadImage('/Gagal.png'));
+					  Text   := FormAddString('Maaf DATA gagal untuk dikirim, periksa nomor pusat pesan, atau cek pulsa anda :).');
+					 
+					  ShowForm;
+					  
+					  AddCommand(back);
+					  
+					  repeat
+					    menu := GetClickedCommand;
+					  until menu = back;
+					  
+					  MainMenu;
+					end;
+			   end;
+			until menu2 = back;
+			Comment;
+	  end;
+			
+  until menu = cm_bck;
+  
+  MainMenu;
+end;
+
+Procedure FirstOpen;
+var 	Text : Integer;
+			mnu	 : Command;
+begin
+  rs := OpenRecordStore('JPXT');
+  
+  
+  if NextRecord(1) = '' then
+    begin
+      ClearForm;
+      ShowForm;
+      SetFormTitle('Pesan pengantar');
+      
+      Text := FormAddString('F_Computer Java Prmbon. Copyright 2006 - 2008. Program ini freeware, anda bisa mendistribusikan program ini sesuka anda. Namun JANGAN pernah mematok harga'+
+                						' pada program ini. Program ini hanya ramalan, bagi anda yang percaya boleh - boleh saja, bagi yang tidak percaya, saya juga tidak memaksa anda untuk percaya.'+ 
+														' Semua nasib anda tergantung pada kehendak Tuhan. Best Regards F_Computer CEO.');
+      cm_Next := CreateCommand('Setuju', cm_ok, 1);
+			AddCommand(cm_next);
+      
+      repeat
+        mnu := GetClickedCommand;
+        if mnu = cm_next then
+          MainMenu;
+      until mnu = cm_bck;
+    end;
+    
+  if ReadRecordStoreEntry(rs,1) = 'Uwis' then 
+    MainMenu;
+    
+  entryIdx := AddRecordStoreEntry(rs, 'Uwis');
+  CloseRecordstore(rs);
+end;
+  
+procedure Mainmenu;
+var  klhran, LVMeter, KP, Goldarah, Tto, Abt, Cmnt, Hst,
+     exitcmd : Integer;
+begin
+  ShowMenu('Main Menu', CH_IMPLICIT); 
+     
+  klhran := MenuAppendStringImage('Primbon Kelahiran', LoadImage('/kelahiran.png')); 
+  LVMeter:= MenuAppendStringImage('Love Meter', LoadImage('/lovemeter.png')); 
+  KP		 := MenuAppendStringImage('Kecocokan Pasangan', LoadImage('/pnikah.png')); 
+  GolDarah := MenuAppendStringImage('Golongan Darah', LoadImage('/getih.png')); 
+  Tto			 := MenuAppendStringImage('Thanks to',LoadImage('/tto.png'));
+  Cmnt		 := MenuAppendStringImage('Comment !!',LoadImage('/comment.png'));
+  Abt			 := MenuAppendStringImage('About',LoadImage('/About.png'));
+  exitcmd  := MenuAppendStringImage('Keluar/Exit/Metu', LoadImage('/Metu.png'));
+  
+  cm_Next := CreateCommand('Lanjut', cm_ok, 1);
+  cm_Bck := CreateCommand('Kembali', cm_back, 2);
+  AddCommand(cm_Next);
+  
+  repeat
+    chck := GetClickedCommand
+  until chck <> EmptyCommand;
+  
+  if MenuGetSelectedIndex = klhran then PRK;
+  if MenuGetSelectedIndex = LVMeter then LOVEMeter
+  if MenuGetSelectedIndex = KP then PilihOpsi;
+	if MenuGetSelectedIndex = GolDarah then goldar;
+	if MenuGetSelectedIndex = tto then thnks;
+	if MenuGetSelectedIndex = cmnt then Comment;
+	if MenuGetSelectedIndex = Abt then About;
+	if MenuGetSelectedIndex = exitcmd then Halt;
+end;
+
+var 	Gambar : image;
+			tombol : Integer;
+begin
+  SetColor(0,0,0);
+  FillRect(0,0,GetWidth,GetHeight);
+  
+  Gambar := LoadImage('/Splashimage.png');
+  DrawImage(Gambar,(GetWidth - GetImageWidth(Gambar)) div 2,(GetHeight - GetImageheight(Gambar)) div 2);
+  SetColor(255,255,255);
+  DrawText('Press 5', (GetWidth - GetStringWidth('Press 5')) div 2, ((GetHeight - GetImageheight(Gambar))  + 60)); 
+    
+  Repaint;
+  
+  repeat
+    Tombol := GetKeyPressed; 
+  until (Tombol = KE_KEY5);
+  
+  ShowForm;
+	MainMenu;
+end.
+ 
