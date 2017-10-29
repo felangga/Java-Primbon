@@ -1250,7 +1250,7 @@ begin
   
   
   Gambar := FormAddImage(LoadImage('/THANKS.png'));
-  Text := FormAddString('Jesus Christ, M.AliAkov (Ide program + Informasi), Ofan & Niko (Support), XTNA (Special Support), my family and my dog,  www.primbon.com, Horoscoop International, Ramalan Horoskop Java v2.0, etc');
+  Text := FormAddString('Jesus Christ, M.AliAkov (Ide program + Informasi), Ofan & Niko (Support), my family and my dog,  www.primbon.com, Horoscoop International, Ramalan Horoskop Java v2.0, etc');
   
   AddCommand(cm_bck);
   
